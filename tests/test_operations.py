@@ -213,6 +213,7 @@ class TestOperationFactory:
             'divide': Division,
             'power': Power,
             'root': Root,
+            'mod': Modulus
         }
 
         for op_name, op_class in operation_map.items():
