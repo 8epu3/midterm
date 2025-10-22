@@ -181,6 +181,25 @@ class TestRoot(BaseOperationTest):
         },
     }
 
+class TestModulus(BaseOperationTest):
+    """Test Modulus operation."""
+
+    operation_class = Modulus
+    valid_test_cases = {
+        "positive_numbers": {"a": "7", "b": "3", "expected": "1"},
+        "negative_numbers": {"a": "-7", "b": "-3", "expected": "-1"},
+        "mixed_signs_a_negative": {"a": "-7", "b": "3", "expected": "-1"},
+        "mixed_signs_b_negative": {"a": "7", "b": "-3", "expected": "1"},
+        "zero_dividend": {"a": "0", "b": "5", "expected": "0"},
+    }
+    invalid_test_cases = {
+        "divide_by_zero": {
+            "a": "5",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Division by zero is not allowed in modulus operation",
+        },
+    }
 
 class TestOperationFactory:
     """Test OperationFactory functionality."""
