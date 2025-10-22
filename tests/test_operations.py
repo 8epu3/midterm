@@ -11,6 +11,7 @@ from app.operations import (
     Division,
     Power,
     Root,
+    Modulus,
     OperationFactory,
 )
 
