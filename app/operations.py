@@ -264,11 +264,12 @@ class Modulus(Operation):
         super().validate_operands(a, b)
         if b == 0:
             raise ValidationError("Division by zero is not allowed in modulus operation")
-   
+    
     def execute(self, a: Decimal, b: Decimal) -> Decimal:
         """
         Perform modulus operation.
         """
+        self.validate_operands(a,b)
         return a % b
 
 class OperationFactory:
