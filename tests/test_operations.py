@@ -14,6 +14,7 @@ from app.operations import (
     Modulus,
     IntegerDivision,
     OperationFactory,
+    Percentage,
 )
 
 
@@ -223,6 +224,26 @@ class TestIntegerDivision(BaseOperationTest):
         },
     }
 
+class TestPercentage(BaseOperationTest):
+    """Test Percentage operation."""
+
+    operation_class = Percentage
+    valid_test_cases = {
+        "simple_case": {"a": "50", "b": "200", "expected": "25"},
+        "equal_numbers": {"a": "100", "b": "100", "expected": "100"},
+        "small_numbers": {"a": "1", "b": "4", "expected": "25"},
+        "decimal_numbers": {"a": "2.5", "b": "5", "expected": "50"},
+        "zero_numerator": {"a": "0", "b": "10", "expected": "0"},
+    }
+    invalid_test_cases = {
+        "divide_by_zero": {
+            "a": "5",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Division by zero is not allowed in percentage calculation",
+        },
+    }
+
 
 class TestOperationFactory:
     """Test OperationFactory functionality."""
@@ -238,6 +259,7 @@ class TestOperationFactory:
             'root': Root,
             'mod': Modulus,
             'int-div': IntegerDivision,
+            'percent': Percentage,
         }
 
         for op_name, op_class in operation_map.items():
