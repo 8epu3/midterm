@@ -249,6 +249,51 @@ class Root(Operation):
         return Decimal(pow(float(a), 1 / float(b)))
 
 
+
+class Modulus(Operation):
+    """
+    Modulus operation implementation.
+
+    Computes the remainder of the division of one number by another.
+    """
+
+    def validate_operands(self, a: Decimal, b: Decimal) -> None:
+        """
+        Validate operands, checking for division by zero.
+        """
+        super().validate_operands(a, b)
+        if b == 0:
+            raise ValidationError("Division by zero is not allowed in modulus operation")
+    
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Perform modulus operation.
+        """
+        self.validate_operands(a,b)
+        return a % b
+
+class IntegerDivision(Operation):
+    """
+    Integer division operation implementation.
+
+    Performs division that results in an integer quotient, discarding any fractional part.
+    """
+
+    def validate_operands(self, a: Decimal, b: Decimal) -> None:
+        """
+        Validate operands, checking for division by zero.
+        """
+        super().validate_operands(a, b)
+        if b == 0:
+            raise ValidationError("Division by zero is not allowed in integer division")
+
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Perform integer division.
+        """
+        self.validate_operands(a, b)
+        return a // b
+
 class OperationFactory:
     """
     Factory class for creating operation instances.
@@ -265,7 +310,9 @@ class OperationFactory:
         'multiply': Multiplication,
         'divide': Division,
         'power': Power,
-        'root': Root
+        'root': Root,
+        'mod': Modulus,
+        'int-div': IntegerDivision,
     }
 
     @classmethod
