@@ -2,6 +2,9 @@ name: Test Python Code
 
 on:
   pull_request:
+    branches:
+      - master  # Run tests on any pull request to the main branch
+      - develop
 
 jobs:
   test:
