@@ -26,5 +26,5 @@ jobs:
 
       - name: Run tests (cannot fail)
         run: |
-          pytest || true
+          pytest
 
