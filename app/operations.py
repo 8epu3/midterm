@@ -294,6 +294,29 @@ class IntegerDivision(Operation):
         self.validate_operands(a, b)
         return a // b
 
+class Percentage(Operation):
+    """
+    Percentage operation implementation.
+
+    Calculates the percentage of one number with respect to another.
+    (Percentage(a, b) = (a / b) * 100)
+    """
+
+    def validate_operands(self, a: Decimal, b: Decimal) -> None:
+        """
+        Validate operands, checking for division by zero.
+        """
+        super().validate_operands(a, b)
+        if b == 0:
+            raise ValidationError("Division by zero is not allowed in percentage calculation")
+
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Perform percentage calculation.
+        """
+        self.validate_operands(a, b)
+        return (a / b) * 100
+
 class OperationFactory:
     """
     Factory class for creating operation instances.
@@ -313,6 +336,7 @@ class OperationFactory:
         'root': Root,
         'mod': Modulus,
         'int-div': IntegerDivision,
+        'percent': Percentage,
     }
 
     @classmethod
