@@ -62,7 +62,7 @@ class TestAddition(BaseOperationTest):
 
     operation_class = Addition
     valid_test_cases = {
-        "positive_numbers": {"a": "5", "b": "3", "expected": "9"},
+        "positive_numbers": {"a": "5", "b": "3", "expected": "8"},
         "negative_numbers": {"a": "-5", "b": "-3", "expected": "-8"},
         "mixed_signs": {"a": "-5", "b": "3", "expected": "-2"},
         "zero_sum": {"a": "5", "b": "-5", "expected": "0"},
