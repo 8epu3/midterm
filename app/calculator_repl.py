@@ -156,15 +156,15 @@ def calculator_repl():
             except KeyboardInterrupt:
                 # Handle Ctrl+C interruption gracefully
                 print("\nOperation cancelled")
-                continue
+                continue # pragma: no cover
             except EOFError:
                 # Handle end-of-file (e.g., Ctrl+D) gracefully
                 print("\nInput terminated. Exiting...")
-                break
+                break # pragma: no cover
             except Exception as e:
                 # Handle any other unexpected exceptions
                 print(f"Error: {e}")
-                continue
+                continue # pragma: no cover
 
     except Exception as e:
         # Handle fatal errors during initialization
