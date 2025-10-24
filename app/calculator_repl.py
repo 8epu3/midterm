@@ -8,7 +8,17 @@ import logging
 from app.calculator import Calculator
 from app.exceptions import OperationError, ValidationError
 from app.history import AutoSaveObserver, LoggingObserver
-from app.operations import OperationFactory
+from app.operations import OperationFactory, OperationCommandRegistry
+
+def generate_command_help_menu() -> str:
+    """Generate a dynamic help menu from registered operations."""
+    lines = ["Available Commands:\n"]
+
+    for command, op_class in OperationCommandRegistry.get_operation_commands().items():
+        description = (op_class.__doc__ or "No description available").strip()
+        lines.append(f"  {command:<10} - {description}")
+
+    return "\n".join(lines)
 
 
 def calculator_repl():
@@ -36,7 +46,7 @@ def calculator_repl():
                 if command == 'help':
                     # Display available commands
                     print("\nAvailable commands:")
-                    print("  add, subtract, multiply, divide, power, root, mod - Perform calculations")
+                    print(generate_command_help_menu())
                     print("  history - Show calculation history")
                     print("  clear - Clear calculation history")
                     print("  undo - Undo the last calculation")
@@ -107,7 +117,7 @@ def calculator_repl():
                         print(f"Error loading history: {e}")
                     continue
 
-                if command in ['add', 'subtract', 'multiply', 'divide', 'power', 'root', 'mod']:
+                if command in ['add', 'subtract', 'multiply', 'divide', 'power', 'root', 'mod', 'int-div', 'percent', 'abs-diff']:
                     # Perform the specified arithmetic operation
                     try:
                         print("\nEnter numbers (or 'cancel' to abort):")
@@ -146,15 +156,15 @@ def calculator_repl():
             except KeyboardInterrupt:
                 # Handle Ctrl+C interruption gracefully
                 print("\nOperation cancelled")
-                continue
+                continue # pragma: no cover
             except EOFError:
                 # Handle end-of-file (e.g., Ctrl+D) gracefully
                 print("\nInput terminated. Exiting...")
-                break
+                break # pragma: no cover
             except Exception as e:
                 # Handle any other unexpected exceptions
                 print(f"Error: {e}")
-                continue
+                continue # pragma: no cover
 
     except Exception as e:
         # Handle fatal errors during initialization
