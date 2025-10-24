@@ -7,6 +7,36 @@ from decimal import Decimal
 from typing import Dict
 from app.exceptions import ValidationError
 
+class OperationCommandRegistry:
+    """Registry to store command names and their operation classes."""
+
+    _operations = {}
+
+    @classmethod
+    def register(cls, command: str, operation_class: type) -> None:
+        """Register a command with its operation class."""
+        cls._operations[command] = operation_class
+
+    @classmethod
+    def get_operation_commands(cls) -> dict:
+        """Return all registered operations."""
+        return cls._operations
+
+    @classmethod
+    def register_operation_command(cls, command: str):
+        """
+        Decorator that registers an operation class under a given command.
+        Example:
+        @register_operation("add")
+        class Addition(Operation): ...
+        """
+        def decorator(cls):
+            OperationCommandRegistry.register(command, cls)
+            return cls
+    
+        return decorator
+
+
 
 class Operation(ABC):
     """
@@ -62,7 +92,7 @@ class Operation(ABC):
         """
         return self.__class__.__name__
 
-
+@OperationCommandRegistry.register_operation_command("add")
 class Addition(Operation):
     """
     Addition operation implementation.
@@ -85,6 +115,7 @@ class Addition(Operation):
         return a + b
 
 
+@OperationCommandRegistry.register_operation_command("substract")
 class Subtraction(Operation):
     """
     Subtraction operation implementation.
@@ -107,6 +138,7 @@ class Subtraction(Operation):
         return a - b
 
 
+@OperationCommandRegistry.register_operation_command("multiply")
 class Multiplication(Operation):
     """
     Multiplication operation implementation.
@@ -129,6 +161,7 @@ class Multiplication(Operation):
         return a * b
 
 
+@OperationCommandRegistry.register_operation_command("divide")
 class Division(Operation):
     """
     Division operation implementation.
@@ -168,6 +201,7 @@ class Division(Operation):
         return a / b
 
 
+@OperationCommandRegistry.register_operation_command("power")
 class Power(Operation):
     """
     Power (exponentiation) operation implementation.
@@ -207,6 +241,7 @@ class Power(Operation):
         return Decimal(pow(float(a), float(b)))
 
 
+@OperationCommandRegistry.register_operation_command("root")
 class Root(Operation):
     """
     Root operation implementation.
@@ -250,6 +285,7 @@ class Root(Operation):
 
 
 
+@OperationCommandRegistry.register_operation_command("mod")
 class Modulus(Operation):
     """
     Modulus operation implementation.
@@ -272,6 +308,8 @@ class Modulus(Operation):
         self.validate_operands(a,b)
         return a % b
 
+
+@OperationCommandRegistry.register_operation_command("int-div")
 class IntegerDivision(Operation):
     """
     Integer division operation implementation.
@@ -294,6 +332,8 @@ class IntegerDivision(Operation):
         self.validate_operands(a, b)
         return a // b
 
+
+@OperationCommandRegistry.register_operation_command("percent")
 class Percentage(Operation):
     """
     Percentage operation implementation.
@@ -317,6 +357,7 @@ class Percentage(Operation):
         self.validate_operands(a, b)
         return (a / b) * 100
 
+@OperationCommandRegistry.register_operation_command("abs-diff")
 class AbsoluteDifference(Operation):
     """
     Absolute difference operation implementation.
@@ -394,3 +435,5 @@ class OperationFactory:
         if not operation_class:
             raise ValueError(f"Unknown operation: {operation_type}")
         return operation_class()
+
+
